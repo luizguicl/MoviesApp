@@ -83,7 +83,7 @@ public class MoviesFragment extends Fragment {
         listView.setAdapter(moviesAdapter);
 
 
-        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask();
+        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
         moviesTask.execute();
 
 
