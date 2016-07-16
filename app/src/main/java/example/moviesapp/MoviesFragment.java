@@ -59,21 +59,11 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Create some dummy data for the GridView.
-        String[] data = {
-               "X-men Apocalypse",
-                "War Craft",
-                "Ghostbusters",
-                "Finding Dory",
-                "Suicide Squad",
-        };
-        List<String> recentMovies = new ArrayList<String>(Arrays.asList(data));
 
-        ArrayAdapter<String> moviesAdapter = new ArrayAdapter<String>(
+
+        MoviesAdapter moviesAdapter = new MoviesAdapter(
                 getActivity(),
-                R.layout.list_item_movie,
-                R.id.name,
-                recentMovies
+                new ArrayList<Movie>()
         );
 
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);

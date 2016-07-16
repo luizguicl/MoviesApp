@@ -19,17 +19,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<String>> {
+public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
 
     private final String TAG = FetchPopularMoviesTask.class.getSimpleName();
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<Movie> adapter;
 
-    public FetchPopularMoviesTask(ArrayAdapter<String> adapter) {
+    public FetchPopularMoviesTask(ArrayAdapter<Movie> adapter) {
         this.adapter = adapter;
     }
 
     @Override
-    protected List<String> doInBackground(Void... voids) {
+    protected List<Movie> doInBackground(Void... voids) {
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -108,16 +108,16 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<String>> 
     }
 
     @Override
-    protected void onPostExecute(List<String> result) {
+    protected void onPostExecute(List<Movie> result) {
         if (result != null && adapter != null) {
             adapter.clear();
-            for(String movieInfoStr : result) {
+            for(Movie movieInfoStr : result) {
                 adapter.add(movieInfoStr);
             }
         }
     }
 
-    private List<String> getMovieDataFromJson(String popularMoviesJsonStr) throws JSONException {
+    private List<Movie> getMovieDataFromJson(String popularMoviesJsonStr) throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
         final String MDB_RESULTS = "results";
@@ -125,12 +125,13 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<String>> 
         final String MDB_TITLE = "title";
         final String MDB_OVERVIEW = "overview";
         final String MDB_VOTE_AVERAGE = "vote_average";
+        final String MDB_RELEASE_DATE = "release_date";
 
 
         JSONObject popularMoviesJson = new JSONObject(popularMoviesJsonStr);
         JSONArray moviesArray = popularMoviesJson.getJSONArray(MDB_RESULTS);
 
-        List<String> moviesResult = new ArrayList<>();
+        List<Movie> moviesResult = new ArrayList<>();
 
         for (int i = 0; i < moviesArray.length(); i++) {
 
@@ -139,8 +140,11 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<String>> 
 
             String title = movieObject.getString(MDB_TITLE);
             Double voteAverage = movieObject.getDouble(MDB_VOTE_AVERAGE);
+            String releaseDate = movieObject.getString(MDB_RELEASE_DATE);
 
-            moviesResult.add(TextUtils.concat(title, " \n ", "Vote average : ", voteAverage.toString()).toString());
+            Movie movie = new Movie(-1, title, "", "", releaseDate, voteAverage);
+
+            moviesResult.add(movie);
 
         }
 
