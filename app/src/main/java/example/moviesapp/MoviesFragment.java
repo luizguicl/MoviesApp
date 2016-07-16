@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +31,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class MoviesFragment extends Fragment {
+
+    private final String TAG = MoviesFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,10 +83,13 @@ public class MoviesFragment extends Fragment {
         listView.setAdapter(moviesAdapter);
 
 
+        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask();
+        moviesTask.execute();
+
+
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
