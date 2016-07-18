@@ -18,8 +18,12 @@ android {
         }
     }
 
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def MY_MOVIE_DB_API_KEY = properties.getProperty('MY_MOVIE_DB_API_KEY')
+
     buildTypes.each {
-        it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY', '"MY_MOVIE_DB_API_KEY"'
+        it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY',  "\"" + MY_MOVIE_DB_API_KEY + "\""
     }
 }
 
