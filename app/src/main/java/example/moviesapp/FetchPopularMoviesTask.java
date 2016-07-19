@@ -1,29 +1,17 @@
 package example.moviesapp;
 
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import example.moviesapp.restClients.TheMovieDbClient;
 import example.moviesapp.restClients.TheMovieDbClientFactory;
-import example.moviesapp.restClients.models.MovieData;
+import example.moviesapp.restClients.models.Movie;
+import example.moviesapp.restClients.models.TheMovieDbResponse;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
@@ -40,14 +28,14 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
 
         TheMovieDbClient theMovieDbClient = TheMovieDbClientFactory.createInstance();
 
-        Call<List<MovieData>> call = theMovieDbClient.getPopularMovies();
+        Call<TheMovieDbResponse> call = theMovieDbClient.getPopularMovies();
 
         List<Movie> result = new ArrayList<>();
 
         try {
-            Response<List<MovieData>> response = call.execute();
-            for (MovieData m : response.body()) {
-                result.add(new Movie(m.id, m.title, m.overview, m.posterPath, m.releaseDate, m.voteAverage));
+            Response<TheMovieDbResponse> response = call.execute();
+            for (Movie m : response.body().results) {
+                result.add(m);
             }
         } catch (IOException e) {
             e.printStackTrace();

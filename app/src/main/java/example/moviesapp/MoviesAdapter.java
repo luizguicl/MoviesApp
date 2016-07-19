@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Locale;
 
+import example.moviesapp.restClients.models.Movie;
+
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
 
@@ -35,13 +37,13 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         //TODO: use picasso
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
-        title.setText(movie.getTitle());
+        title.setText(movie.title);
 
         TextView voteAverage = (TextView) convertView.findViewById(R.id.vote_average);
-        voteAverage.setText(String.format(new Locale("pt_BR", "BR"), "%.2f", movie.getVoteAverage()));
+        voteAverage.setText(String.format(new Locale("pt_BR", "BR"), "%.2f", movie.voteAverage));
 
         TextView releaseDate = (TextView) convertView.findViewById(R.id.release_date);
-        releaseDate.setText(movie.getReleaseDate());
+        releaseDate.setText(movie.releaseDate);
 
         return convertView;
     }

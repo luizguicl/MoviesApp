@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TheMovieDbClientFactory {
 
@@ -41,6 +42,7 @@ public class TheMovieDbClientFactory {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient.build())
                 .baseUrl(MOVIES_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         return retrofit.create(TheMovieDbClient.class);
