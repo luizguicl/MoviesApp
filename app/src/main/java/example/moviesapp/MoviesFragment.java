@@ -1,6 +1,8 @@
 package example.moviesapp;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,11 +77,22 @@ public class MoviesFragment extends Fragment {
         listView.setAdapter(moviesAdapter);
 
 
-        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
-        moviesTask.execute();
+        if (isOnline()) {
+            FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
+            moviesTask.execute();
+        } else {
+            Toast.makeText(getActivity(), "There is no internet connection!", Toast.LENGTH_SHORT).show();
+        }
 
 
         return rootView;
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     public void onButtonPressed(Uri uri) {
