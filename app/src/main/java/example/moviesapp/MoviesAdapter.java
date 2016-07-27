@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +17,8 @@ import example.moviesapp.restClients.models.Movie;
 
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
+    private final String MOVIEDB_BASE_URL = "http://image.tmdb.org/t/p/";
+    private final String SIZE = "w185";
 
     public MoviesAdapter(Context context,List<Movie> objects) {
         super(context, 0, objects);
@@ -33,8 +37,10 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie, parent, false);
         }
 
+        String imageUrl = MOVIEDB_BASE_URL + SIZE + movie.posterPath;
+
         ImageView poster = (ImageView) convertView.findViewById(R.id.poster_image);
-        //TODO: use picasso
+        Picasso.with(getContext()).load(imageUrl).into(poster);
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(movie.title);
