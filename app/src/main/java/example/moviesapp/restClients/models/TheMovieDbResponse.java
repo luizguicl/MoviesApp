@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TheMovieDbResponse {
-    public List<Movie> results = new ArrayList<>();
+    public int page;
+    public List<Movie> results = new ArrayList<Movie>();
+    public int totalResults;
+    public int totalPages;
 
 }

@@ -8,6 +8,4 @@ public interface TheMovieDbClient {
 
     @GET("/3/movie/popular")
     Call<TheMovieDbResponse> getPopularMovies();
-
-
 }
