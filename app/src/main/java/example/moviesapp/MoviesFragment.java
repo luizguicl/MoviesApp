@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -26,6 +29,7 @@ public class MoviesFragment extends Fragment {
     private final String TAG = MoviesFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
+    private MoviesAdapter moviesAdapter;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -41,6 +45,7 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
 
         }
@@ -50,9 +55,7 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
-        MoviesAdapter moviesAdapter = new MoviesAdapter(
+        moviesAdapter = new MoviesAdapter(
                 getActivity(),
                 new ArrayList<Movie>()
         );
@@ -63,13 +66,14 @@ public class MoviesFragment extends Fragment {
         GridView listView = (GridView) rootView.findViewById(R.id.moviesList);
         listView.setAdapter(moviesAdapter);
 
-
-        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
-        moviesTask.execute();
-
-
         return rootView;
     }
+
+    private void getPopularMovies(MoviesAdapter moviesAdapter) {
+        FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
+        moviesTask.execute();
+    }
+
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -109,4 +113,22 @@ public class MoviesFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.list_popular_movies:
+                getPopularMovies(moviesAdapter);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
