@@ -4,27 +4,21 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import example.moviesapp.restClients.models.Movie;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +33,7 @@ public class MoviesFragment extends Fragment {
     private final String TAG = MoviesFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
+    private MoviesAdapter moviesAdapter;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -54,6 +49,7 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
 
         }
@@ -63,9 +59,7 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
-        MoviesAdapter moviesAdapter = new MoviesAdapter(
+        moviesAdapter = new MoviesAdapter(
                 getActivity(),
                 new ArrayList<Movie>()
         );
@@ -76,17 +70,18 @@ public class MoviesFragment extends Fragment {
         GridView listView = (GridView) rootView.findViewById(R.id.moviesList);
         listView.setAdapter(moviesAdapter);
 
+        return rootView;
+    }
 
+    private void getPopularMovies(MoviesAdapter moviesAdapter) {
         if (isOnline()) {
             FetchPopularMoviesTask moviesTask = new FetchPopularMoviesTask(moviesAdapter);
             moviesTask.execute();
         } else {
             Toast.makeText(getActivity(), "There is no internet connection!", Toast.LENGTH_SHORT).show();
         }
-
-
-        return rootView;
     }
+
 
     public boolean isOnline() {
         ConnectivityManager cm =
@@ -133,4 +128,22 @@ public class MoviesFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.list_popular_movies:
+                getPopularMovies(moviesAdapter);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
