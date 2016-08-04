@@ -20,7 +20,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     private final String MOVIEDB_BASE_URL = "http://image.tmdb.org/t/p/";
     private final String SIZE = "w185";
 
-    public MoviesAdapter(Context context,List<Movie> objects) {
+    public MoviesAdapter(Context context, List<Movie> objects) {
         super(context, 0, objects);
     }
 
