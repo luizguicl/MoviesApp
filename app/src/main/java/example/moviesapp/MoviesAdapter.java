@@ -14,7 +14,7 @@ import java.util.Locale;
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
 
-    public MoviesAdapter(Context context,List<Movie> objects) {
+    public MoviesAdapter(Context context, List<Movie> objects) {
         super(context, 0, objects);
     }
 

@@ -2,7 +2,6 @@ package example.moviesapp;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -46,7 +45,7 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
             final String APPID_PARAM = "api_key";
 
             Uri builtUri = Uri.parse(MOVIES_BASE_URL).buildUpon()
-                    .appendQueryParameter(APPID_PARAM,  BuildConfig.THE_MOVIE_DB_API_KEY)
+                    .appendQueryParameter(APPID_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY)
                     .build();
 
             URL url = new URL(builtUri.toString());
@@ -84,7 +83,7 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
             Log.e(TAG, "Error ", e);
 
             return null;
-        } finally{
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -111,7 +110,7 @@ public class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
     protected void onPostExecute(List<Movie> result) {
         if (result != null && adapter != null) {
             adapter.clear();
-            for(Movie movieInfoStr : result) {
+            for (Movie movieInfoStr : result) {
                 adapter.add(movieInfoStr);
             }
         }
